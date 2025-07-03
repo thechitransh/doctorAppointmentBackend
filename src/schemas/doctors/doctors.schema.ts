@@ -1,18 +1,21 @@
-import { Prop, Schema,SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-@Schema({timestamps:true})
-export class Doctor{
-    @Prop({required:true,trim:true})
-    name:string
-
-    @Prop()
-    image:string
+@Schema({ timestamps: true })
+export class Doctor {
+    @Prop({ required: true, trim: true })
+    name: string
 
     @Prop()
-    tag:string
+    image: string
 
     @Prop()
-    Available :boolean  
+    tag: string
+
+    @Prop()
+    Available: boolean
+
+    @Prop()
+    fee: number
 
 }
 
