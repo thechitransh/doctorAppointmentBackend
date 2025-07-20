@@ -53,10 +53,10 @@ export class DoctorsController {
   }
 
   @Get("/appointment")
-  getById(@Query("id") id: string) {
+  async getById(@Query("id") id: string) {
     if (!id) return new HttpException("Error in fetching", HttpStatus.FAILED_DEPENDENCY)
 
-    const result = this.doctorService.FindOneById(id)
+    const result = await this.doctorService.FindOneById(id)
     return result
   }
 
@@ -65,7 +65,7 @@ export class DoctorsController {
     if (!body.doctorId) return new HttpException("Error in fetching", HttpStatus.FAILED_DEPENDENCY)
     const token = req.cookies.token
     if (!token) {
-      return { error: 'No token provided' };
+      return { error: 'Please Login First', statusCode: 405 };
     }
     const decoded = jwt.verify(token, 'your_jwt_secret') as { email: string };
     const email = decoded.email
@@ -93,6 +93,15 @@ export class DoctorsController {
     const decoded = jwt.verify(token, 'your_jwt_secret') as { email: string };
     const res = await this.doctorService.getMyAppointments(decoded.email)
     return res
+  }
+
+  @Get("/cancelappointment")
+  async cancelAppointment(@Query('id') id: string) {
+    if (!id) {
+      throw new HttpException("Appointment ID missing", HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.doctorService.cancelAppointment(id)
+    return result
   }
 
 }

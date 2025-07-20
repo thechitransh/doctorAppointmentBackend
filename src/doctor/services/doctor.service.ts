@@ -72,14 +72,25 @@ export class DoctorService {
         return slots
     }
     async getMyAppointments(email: string) {
-        const result = await this.appointmentModel.find({ email })
-        const res = result?.map(async (item) => {
-            const data = await this.doctorModel.findOne({ _id: item?.doctorId })
-            return {
-                data,
-                feeStatus: item.paymentStatus
-            }
-        })
-        return res
+        const result = await this.appointmentModel.find({ email });
+
+        const res = await Promise.all(
+            result.map(async (item) => {
+                const data = await this.doctorModel.findOne({ _id: item.doctorId });
+                return {
+                    data,
+                    feeStatus: item.paymentStatus,
+                    date: item.date,
+                    time: item.time,
+                    appointmentId: item._id
+                };
+            })
+        );
+        return res;
+    }
+
+    async cancelAppointment(id: string) {
+        const result = await this.appointmentModel.findOneAndUpdate({ _id: id }, { paymentStatus: "Cancelled" })
+        return result
     }
 }

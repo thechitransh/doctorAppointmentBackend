@@ -12,7 +12,7 @@ export class UserController {
   async signup(@Body() body, @Res({ passthrough: true }) res: Response) {
     const result = await this.userService.userSignup(body)
     res.cookie('token', result.token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000,
@@ -25,7 +25,7 @@ export class UserController {
   profile(@Req() req: Request) {
     const token = req.cookies.token
     if (!token) {
-      return { error: 'No token provided' };
+      return { error: 'No token provided', statusCode: 405 };
     }
     const decoded = jwt.verify(token, 'your_jwt_secret') as { email: string };
     const email = decoded.email
@@ -38,7 +38,7 @@ export class UserController {
     const result = await this.userService.loginUser(body)
     if (result.status === 200) {
       res.cookie('token', result.token, {
-        httpOnly: true,
+        httpOnly: false,
         secure: false,
         maxAge: 24 * 60 * 60 * 1000,
       });
