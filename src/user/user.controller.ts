@@ -13,8 +13,8 @@ export class UserController {
     const result = await this.userService.userSignup(body)
     res.cookie('token', result.token, {
       httpOnly: false,
-      secure: false,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
     });
     return { message: result.message, status: result.status };
@@ -39,7 +39,8 @@ export class UserController {
     if (result.status === 200) {
       res.cookie('token', result.token, {
         httpOnly: false,
-        secure: false,
+        secure: true,
+        sameSite: 'none',
         maxAge: 24 * 60 * 60 * 1000,
       });
     }
