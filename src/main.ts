@@ -11,6 +11,7 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: 'https://appointdoc.netlify.app'
+    // origin:"http://localhost:5173"
   });
   await app.listen(process.env.PORT ?? 3000);
 }
