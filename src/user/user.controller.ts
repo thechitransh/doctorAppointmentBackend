@@ -8,6 +8,11 @@ export class UserController {
 
   constructor(private userService: UserService) { }
 
+  @Get("/")
+  async active() {
+    return { message: "Active" }
+  }
+
   @Post("/signup")
   async signup(@Body() body, @Res({ passthrough: true }) res: Response) {
     const result = await this.userService.userSignup(body)
